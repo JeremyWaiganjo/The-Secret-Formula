@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+
+{% block title %}Meal Plan - The Magic Formula{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Header -->
+    <div class="col-12 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="mb-1">
+                    <i data-feather="calendar" class="me-2"></i>
+                    Your Weekly Meal Plan
+                </h1>
+                <p class="text-muted mb-0">Personalized nutrition plan for {{ user.username }}</p>
+            </div>
+            <div>
+                <form method="POST" action="{{ url_for('regenerate_meal_plan') }}" style="display: inline;">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i data-feather="refresh-cw" class="me-2"></i>
+                        Regenerate Plan
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if plan %}
+    <!-- Calories Info -->
+    <div class="col-12 mb-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="mb-1">Daily Calorie Target</h5>
+                        <h2 class="mb-0">{{ plan.daily_calories }} calories</h2>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <p class="mb-0">Goal: {{ user.goal.title() }}</p>
+                        <p class="mb-0">Activity: {{ user.workout_frequency }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weekly Plan -->
+    <div class="col-12 mb-4">
+        <div class="row g-3">
+            {% for day, meals in plan.plan.items() %}
+            <div class="col-lg-6 col-xl-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-header bg-dark text-white">
+                        <h6 class="mb-0 text-center">
+                            <i data-feather="sun" class="me-2"></i>
+                            {{ day }}
+                        </h6>
+                    </div>
+                    <div class="card-body p-3">
+                        <!-- Breakfast -->
+                        <div class="meal-card mb-3">
+                            <div class="row g-2">
+                                <div class="col-4">
+                                    {% if meals.breakfast.image %}
+                                        <img src="{{ meals.breakfast.image }}" class="img-fluid rounded meal-image" alt="{{ meals.breakfast.name if meals.breakfast.name else meals.breakfast }}">
+                                    {% else %}
+                                        <div class="meal-placeholder bg-warning rounded d-flex align-items-center justify-content-center" style="height: 80px;">
+                                            <i data-feather="sunrise" class="text-white"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-8">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <i data-feather="sunrise" class="text-warning me-2" style="width: 16px; height: 16px;"></i>
+                                        <strong class="text-warning small">Breakfast</strong>
+                                        {% if meals.breakfast.calories %}
+                                            <span class="badge bg-warning text-dark ms-auto small">{{ meals.breakfast.calories }} cal</span>
+                                        {% endif %}
+                                    </div>
+                                    <h6 class="mb-1 small fw-bold">{{ meals.breakfast.name if meals.breakfast.name else meals.breakfast }}</h6>
+                                    {% if meals.breakfast.description %}
+                                        <p class="small text-muted mb-0">{{ meals.breakfast.description }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Lunch -->
+                        <div class="meal-card mb-3">
+                            <div class="row g-2">
+                                <div class="col-4">
+                                    {% if meals.lunch.image %}
+                                        <img src="{{ meals.lunch.image }}" class="img-fluid rounded meal-image" alt="{{ meals.lunch.name if meals.lunch.name else meals.lunch }}">
+                                    {% else %}
+                                        <div class="meal-placeholder bg-info rounded d-flex align-items-center justify-content-center" style="height: 80px;">
+                                            <i data-feather="sun" class="text-white"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-8">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <i data-feather="sun" class="text-info me-2" style="width: 16px; height: 16px;"></i>
+                                        <strong class="text-info small">Lunch</strong>
+                                        {% if meals.lunch.calories %}
+                                            <span class="badge bg-info ms-auto small">{{ meals.lunch.calories }} cal</span>
+                                        {% endif %}
+                                    </div>
+                                    <h6 class="mb-1 small fw-bold">{{ meals.lunch.name if meals.lunch.name else meals.lunch }}</h6>
+                                    {% if meals.lunch.description %}
+                                        <p class="small text-muted mb-0">{{ meals.lunch.description }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Dinner -->
+                        <div class="meal-card mb-3">
+                            <div class="row g-2">
+                                <div class="col-4">
+                                    {% if meals.dinner.image %}
+                                        <img src="{{ meals.dinner.image }}" class="img-fluid rounded meal-image" alt="{{ meals.dinner.name if meals.dinner.name else meals.dinner }}">
+                                    {% else %}
+                                        <div class="meal-placeholder bg-primary rounded d-flex align-items-center justify-content-center" style="height: 80px;">
+                                            <i data-feather="moon" class="text-white"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-8">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <i data-feather="moon" class="text-primary me-2" style="width: 16px; height: 16px;"></i>
+                                        <strong class="text-primary small">Dinner</strong>
+                                        {% if meals.dinner.calories %}
+                                            <span class="badge bg-primary ms-auto small">{{ meals.dinner.calories }} cal</span>
+                                        {% endif %}
+                                    </div>
+                                    <h6 class="mb-1 small fw-bold">{{ meals.dinner.name if meals.dinner.name else meals.dinner }}</h6>
+                                    {% if meals.dinner.description %}
+                                        <p class="small text-muted mb-0">{{ meals.dinner.description }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Snacks -->
+                        <div class="meal-card mb-2">
+                            <div class="d-flex align-items-center mb-2">
+                                <i data-feather="coffee" class="text-success me-2" style="width: 16px; height: 16px;"></i>
+                                <strong class="text-success small">Snacks</strong>
+                            </div>
+                            
+                            <!-- Snack 1 -->
+                            <div class="row g-2 mb-2">
+                                <div class="col-3">
+                                    {% if meals.snack1.image %}
+                                        <img src="{{ meals.snack1.image }}" class="img-fluid rounded meal-image-small" alt="{{ meals.snack1.name if meals.snack1.name else meals.snack1 }}">
+                                    {% else %}
+                                        <div class="meal-placeholder-small bg-success rounded d-flex align-items-center justify-content-center" style="height: 50px;">
+                                            <i data-feather="coffee" class="text-white" style="width: 12px; height: 12px;"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-9">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span class="small fw-bold">{{ meals.snack1.name if meals.snack1.name else meals.snack1 }}</span>
+                                        {% if meals.snack1.calories %}
+                                            <span class="badge bg-success small">{{ meals.snack1.calories }} cal</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if meals.snack1.description %}
+                                        <p class="small text-muted mb-0">{{ meals.snack1.description }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Snack 2 -->
+                            <div class="row g-2">
+                                <div class="col-3">
+                                    {% if meals.snack2.image %}
+                                        <img src="{{ meals.snack2.image }}" class="img-fluid rounded meal-image-small" alt="{{ meals.snack2.name if meals.snack2.name else meals.snack2 }}">
+                                    {% else %}
+                                        <div class="meal-placeholder-small bg-success rounded d-flex align-items-center justify-content-center" style="height: 50px;">
+                                            <i data-feather="coffee" class="text-white" style="width: 12px; height: 12px;"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-9">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span class="small fw-bold">{{ meals.snack2.name if meals.snack2.name else meals.snack2 }}</span>
+                                        {% if meals.snack2.calories %}
+                                            <span class="badge bg-success small">{{ meals.snack2.calories }} cal</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if meals.snack2.description %}
+                                        <p class="small text-muted mb-0">{{ meals.snack2.description }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Tips Section -->
+    {% if plan.tips %}
+    <div class="col-12">
+        <div class="card border-success">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i data-feather="lightbulb" class="me-2"></i>
+                    Nutrition Tips
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for tip in plan.tips %}
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="d-flex">
+                            <i data-feather="check" class="text-success me-2 mt-1" style="width: 16px; height: 16px;"></i>
+                            <span class="small">{{ tip }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <!-- Error State -->
+    <div class="col-12">
+        <div class="card border-danger">
+            <div class="card-body text-center py-5">
+                <i data-feather="alert-circle" class="text-danger mb-3" style="width: 64px; height: 64px;"></i>
+                <h4 class="text-danger mb-3">Unable to Generate Meal Plan</h4>
+                <p class="text-muted mb-4">There was an error generating your personalized meal plan. This could be due to API limitations or temporary service issues.</p>
+                <form method="POST" action="{{ url_for('regenerate_meal_plan') }}" style="display: inline;">
+                    <button type="submit" class="btn btn-primary">
+                        <i data-feather="refresh-cw" class="me-2"></i>
+                        Try Again
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Action Buttons -->
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <a href="{{ url_for('tracker') }}" class="btn btn-success btn-lg me-3">
+            <i data-feather="check-circle" class="me-2"></i>
+            Start Daily Tracking
+        </a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary btn-lg">
+            <i data-feather="home" class="me-2"></i>
+            Go to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

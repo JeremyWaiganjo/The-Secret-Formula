@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}Daily Tracker - The Magic Formula{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <h1 class="mb-2">
+                <i data-feather="check-circle" class="me-2"></i>
+                Daily Tracker
+            </h1>
+            <p class="text-muted">Track your meals and workouts for {{ "today" if not today_log else "today" }}</p>
+            <div class="badge bg-primary fs-6">
+                {{ moment().format('dddd, MMMM Do YYYY') if moment else 'Today' }}
+            </div>
+        </div>
+
+        <!-- Current Status -->
+        {% if today_log %}
+        <div class="alert alert-info d-flex align-items-center mb-4">
+            <i data-feather="info" class="me-3"></i>
+            <div>
+                <strong>Today's Progress:</strong>
+                {% if today_log.meals_logged and today_log.workout_logged %}
+                    Both meals and workout logged! 🎉
+                {% elif today_log.meals_logged %}
+                    Meals logged, workout pending 💪
+                {% elif today_log.workout_logged %}
+                    Workout logged, meals pending 🍽️
+                {% else %}
+                    Nothing logged yet - let's get started! 🚀
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Tracking Form -->
+        <div class="card border-0 shadow">
+            <div class="card-header bg-success text-white text-center py-3">
+                <h4 class="mb-0">
+                    <i data-feather="target" class="me-2"></i>
+                    Log Your Progress
+                </h4>
+            </div>
+            
+            <div class="card-body p-4">
+                <form method="POST" id="trackerForm">
+                    <!-- Meals Section -->
+                    <div class="mb-4">
+                        <h5 class="text-success mb-3">
+                            <i data-feather="coffee" class="me-2"></i>
+                            Meals & Nutrition
+                        </h5>
+                        
+                        <div class="form-check form-switch form-check-lg">
+                            <input class="form-check-input" type="checkbox" id="meals_logged" name="meals_logged" 
+                                   {% if today_log and today_log.meals_logged %}checked{% endif %}>
+                            <label class="form-check-label fw-bold" for="meals_logged">
+                                I followed my meal plan today
+                            </label>
+                        </div>
+                        <div class="form-text">
+                            Check this if you ate according to your meal plan or made healthy food choices
+                        </div>
+                    </div>
+
+                    <!-- Workout Section -->
+                    <div class="mb-4">
+                        <h5 class="text-primary mb-3">
+                            <i data-feather="activity" class="me-2"></i>
+                            Workout & Exercise
+                        </h5>
+                        
+                        <div class="form-check form-switch form-check-lg">
+                            <input class="form-check-input" type="checkbox" id="workout_logged" name="workout_logged"
+                                   {% if today_log and today_log.workout_logged %}checked{% endif %}>
+                            <label class="form-check-label fw-bold" for="workout_logged">
+                                I completed a workout today
+                            </label>
+                        </div>
+                        <div class="form-text">
+                            Any physical activity counts - gym, walking, sports, yoga, etc.
+                        </div>
+                    </div>
+
+                    <!-- Notes Section -->
+                    <div class="mb-4">
+                        <h5 class="text-info mb-3">
+                            <i data-feather="edit" class="me-2"></i>
+                            Daily Notes (Optional)
+                        </h5>
+                        
+                        <textarea class="form-control" id="notes" name="notes" rows="3" 
+                                  placeholder="How did you feel today? Any challenges or wins?">{% if today_log %}{{ today_log.notes }}{% endif %}</textarea>
+                        <div class="form-text">
+                            Track your mood, energy levels, challenges, or victories
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i data-feather="save" class="me-2"></i>
+                            {% if today_log %}Update{% else %}Save{% endif %} Today's Log
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- User Stats -->
+        <div class="row g-3 mt-4">
+            <div class="col-md-4">
+                <div class="card border-warning text-center">
+                    <div class="card-body">
+                        <i data-feather="zap" class="text-warning mb-2" style="width: 32px; height: 32px;"></i>
+                        <h3 class="text-warning">{{ user.points }}</h3>
+                        <p class="mb-0 small">Total Points</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card border-danger text-center">
+                    <div class="card-body">
+                        <i data-feather="fire" class="text-danger mb-2" style="width: 32px; height: 32px;"></i>
+                        <h3 class="text-danger">{{ user.current_streak }}</h3>
+                        <p class="mb-0 small">Current Streak</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card border-info text-center">
+                    <div class="card-body">
+                        <i data-feather="award" class="text-info mb-2" style="width: 32px; height: 32px;"></i>
+                        <h3 class="text-info">{{ user.longest_streak }}</h3>
+                        <p class="mb-0 small">Best Streak</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="card border-info mt-4">
+            <div class="card-body">
+                <h6 class="card-title text-info">
+                    <i data-feather="lightbulb" class="me-2"></i>Daily Tracking Tips
+                </h6>
+                <ul class="mb-0 small">
+                    <li>Log your progress every day to build consistency</li>
+                    <li>Even small efforts count - a 10-minute walk is still exercise!</li>
+                    <li>Be honest with yourself - it helps you improve</li>
+                    <li>Don't worry if you miss a day - just get back on track tomorrow</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="text-center mt-4">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary me-3">
+                <i data-feather="home" class="me-2"></i>
+                Dashboard
+            </a>
+            <a href="{{ url_for('meal_plan') }}" class="btn btn-outline-secondary">
+                <i data-feather="calendar" class="me-2"></i>
+                Meal Plan
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

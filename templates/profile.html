@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Create Profile - The Magic Formula{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow">
+            <div class="card-header bg-primary text-white text-center py-4">
+                <h2 class="mb-0">
+                    <i data-feather="user" class="me-2"></i>
+                    Create Your Profile
+                </h2>
+                <p class="mb-0 mt-2 opacity-75">Tell us about yourself to get personalized meal plans</p>
+            </div>
+            
+            <div class="card-body p-4">
+                <form method="POST" id="profileForm">
+                    <!-- Basic Information -->
+                    <div class="mb-4">
+                        <h5 class="text-primary mb-3">
+                            <i data-feather="info" class="me-2"></i>Basic Information
+                        </h5>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label for="age" class="form-label">Age</label>
+                                <input type="number" class="form-control" id="age" name="age" min="13" max="100" required>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label for="weight" class="form-label">Weight (kg)</label>
+                                <input type="number" class="form-control" id="weight" name="weight" min="30" max="300" step="0.1" required>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label for="height" class="form-label">Height (cm)</label>
+                                <input type="number" class="form-control" id="height" name="height" min="120" max="250" required>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label for="gender" class="form-label">Gender</label>
+                                <select class="form-select" id="gender" name="gender" required>
+                                    <option value="">Select gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fitness Information -->
+                    <div class="mb-4">
+                        <h5 class="text-primary mb-3">
+                            <i data-feather="activity" class="me-2"></i>Fitness Information
+                        </h5>
+                        
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="workout_frequency" class="form-label">Workout Frequency</label>
+                                <select class="form-select" id="workout_frequency" name="workout_frequency" required>
+                                    <option value="">Select frequency</option>
+                                    <option value="sedentary">Sedentary (desk job, no exercise)</option>
+                                    <option value="1-2 times per week">Light (1-2 times per week)</option>
+                                    <option value="3-4 times per week">Moderate (3-4 times per week)</option>
+                                    <option value="5-6 times per week">Active (5-6 times per week)</option>
+                                    <option value="daily">Very Active (daily intense exercise)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label for="goal" class="form-label">Primary Goal</label>
+                                <select class="form-select" id="goal" name="goal" required>
+                                    <option value="">Select goal</option>
+                                    <option value="slim">Lose Weight (Slim Down)</option>
+                                    <option value="maintain">Maintain Current Weight</option>
+                                    <option value="bulk">Gain Weight (Build Muscle)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i data-feather="arrow-right" class="me-2"></i>
+                            Create Profile & Get Meal Plan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Info Box -->
+        <div class="card border-info bg-dark mt-4">
+            <div class="card-body">
+                <h6 class="card-title text-info">
+                    <i data-feather="shield" class="me-2"></i>Privacy & Security
+                </h6>
+                <p class="card-text small mb-0">
+                    Your personal information is used only to generate personalized meal plans. 
+                    We don't share your data with third parties.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

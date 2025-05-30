@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - The Magic Formula{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-5">
+            <div class="mb-4">
+                <i data-feather="zap" style="width: 80px; height: 80px;" class="text-primary"></i>
+            </div>
+            <h1 class="display-4 fw-bold mb-3">The Magic Formula</h1>
+            <p class="lead mb-4">Your AI-powered diet companion with personalized meal planning, daily tracking, and friendly competition!</p>
+            
+            {% if not session.user_id %}
+                <a href="{{ url_for('signup') }}" class="btn btn-primary btn-lg me-3">
+                    <i data-feather="user-plus" class="me-2"></i>Sign Up Free
+                </a>
+                <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg">
+                    <i data-feather="log-in" class="me-2"></i>Log In
+                </a>
+            {% else %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg me-3">
+                    <i data-feather="home" class="me-2"></i>Go to Dashboard
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Features Grid -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-6">
+                <div class="card h-100 border-0 bg-dark stats-card-enhanced" style="background: linear-gradient(135deg, var(--bs-info) 0%, var(--bs-primary) 100%) !important;">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i data-feather="cpu" style="width: 48px; height: 48px;"></i>
+                        </div>
+                        <h5 class="card-title">AI Meal Planning</h5>
+                        <p class="card-text">Get personalized weekly meal plans tailored to your goals, preferences, and lifestyle.</p>
+                        <div class="mt-3">
+                            <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=300&h=200&fit=crop" class="img-fluid rounded" alt="Healthy meal planning" style="height: 120px; object-fit: cover; width: 100%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card h-100 border-0 bg-dark stats-card-enhanced" style="background: linear-gradient(135deg, var(--bs-success) 0%, var(--bs-info) 100%) !important;">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i data-feather="check-circle" style="width: 48px; height: 48px;"></i>
+                        </div>
+                        <h5 class="card-title">Daily Tracking</h5>
+                        <p class="card-text">Log your meals and workouts daily to build consistency and track your progress.</p>
+                        <div class="mt-3">
+                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=200&fit=crop" class="img-fluid rounded" alt="Daily fitness tracking" style="height: 120px; object-fit: cover; width: 100%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card h-100 border-0 bg-dark stats-card-enhanced" style="background: linear-gradient(135deg, var(--bs-warning) 0%, var(--bs-danger) 100%) !important;">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i data-feather="award" style="width: 48px; height: 48px;"></i>
+                        </div>
+                        <h5 class="card-title">Achievement System</h5>
+                        <p class="card-text">Earn points, maintain streaks, and unlock achievements as you progress on your journey.</p>
+                        <div class="mt-3">
+                            <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=200&fit=crop" class="img-fluid rounded" alt="Achievement badges" style="height: 120px; object-fit: cover; width: 100%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card h-100 border-0 bg-dark stats-card-enhanced" style="background: linear-gradient(135deg, var(--bs-danger) 0%, var(--bs-primary) 100%) !important;">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i data-feather="zap" style="width: 48px; height: 48px;"></i>
+                        </div>
+                        <h5 class="card-title">Rival Bot Competition</h5>
+                        <p class="card-text">Compete against Bot Jeremy! Stay consistent or watch him take the lead in your fitness journey.</p>
+                        <div class="mt-3">
+                            <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=300&h=200&fit=crop" class="img-fluid rounded" alt="Competition and rivalry" style="height: 120px; object-fit: cover; width: 100%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="text-center mb-5">
+            <h2 class="mb-4">How It Works</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <span class="fw-bold text-white">1</span>
+                        </div>
+                    </div>
+                    <h5>Create Your Profile</h5>
+                    <p class="text-muted">Tell us about your age, weight, fitness goals, and workout frequency.</p>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <span class="fw-bold text-white">2</span>
+                        </div>
+                    </div>
+                    <h5>Get Your Meal Plan</h5>
+                    <p class="text-muted">Receive a personalized weekly meal plan generated by our AI based on your profile.</p>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <span class="fw-bold text-white">3</span>
+                        </div>
+                    </div>
+                    <h5>Track & Compete</h5>
+                    <p class="text-muted">Log your daily progress, earn points, and compete against Bot Jeremy!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        {% if not session.user_id %}
+        <div class="text-center py-5 bg-primary rounded">
+            <div class="container">
+                <h3 class="text-white mb-3">Ready to Transform Your Diet?</h3>
+                <p class="text-white-50 mb-4">Join thousands of users who are achieving their fitness goals with Jeremy's Secret Ingredient.</p>
+                <a href="{{ url_for('signup') }}" class="btn btn-light btn-lg">
+                    <i data-feather="arrow-right" class="me-2"></i>Start Your Journey
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

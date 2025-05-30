@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - The Magic Formula{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Header -->
+    <div class="col-12 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="mb-1">
+                    <i data-feather="home" class="me-2"></i>
+                    Welcome back, {{ user.username }}!
+                </h1>
+                <p class="text-muted mb-0">Here's your fitness journey overview</p>
+            </div>
+            <div>
+                <a href="{{ url_for('tracker') }}" class="btn btn-primary">
+                    <i data-feather="plus" class="me-2"></i>
+                    Log Today
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Stats Cards -->
+    <div class="col-12 mb-4">
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="stats-card-enhanced">
+                    <div class="mb-3">
+                        <i data-feather="zap" style="width: 48px; height: 48px;"></i>
+                    </div>
+                    <h2 class="mb-1" data-counter="{{ user.points }}">{{ user.points }}</h2>
+                    <p class="mb-0 opacity-75">Total Points</p>
+                    <div class="progress-enhanced mt-3">
+                        <div class="progress-bar" style="width: {{ (user.points / 50 * 100) if user.points < 50 else 100 }}%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stats-card-enhanced" style="background: linear-gradient(135deg, var(--bs-danger) 0%, var(--bs-warning) 100%);">
+                    <div class="mb-3">
+                        <i data-feather="fire" style="width: 48px; height: 48px;"></i>
+                    </div>
+                    <h2 class="mb-1" data-counter="{{ user.current_streak }}">{{ user.current_streak }}</h2>
+                    <p class="mb-0 opacity-75">Current Streak</p>
+                    <div class="progress-enhanced mt-3">
+                        <div class="progress-bar" style="width: {{ (user.current_streak / 30 * 100) if user.current_streak < 30 else 100 }}%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stats-card-enhanced" style="background: linear-gradient(135deg, var(--bs-info) 0%, var(--bs-primary) 100%);">
+                    <div class="mb-3">
+                        <i data-feather="award" style="width: 48px; height: 48px;"></i>
+                    </div>
+                    <h2 class="mb-1" data-counter="{{ user.longest_streak }}">{{ user.longest_streak }}</h2>
+                    <p class="mb-0 opacity-75">Best Streak</p>
+                    <div class="progress-enhanced mt-3">
+                        <div class="progress-bar" style="width: {{ (user.longest_streak / 30 * 100) if user.longest_streak < 30 else 100 }}%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="stats-card-enhanced" style="background: linear-gradient(135deg, var(--bs-success) 0%, var(--bs-info) 100%);">
+                    <div class="mb-3">
+                        <i data-feather="calendar" style="width: 48px; height: 48px;"></i>
+                    </div>
+                    <h2 class="mb-1" data-counter="{{ recent_logs|length }}">{{ recent_logs|length }}</h2>
+                    <p class="mb-0 opacity-75">Days Logged</p>
+                    <div class="progress-enhanced mt-3">
+                        <div class="progress-bar" style="width: {{ (recent_logs|length / 7 * 100) if recent_logs|length < 7 else 100 }}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Competition vs Bot -->
+    <div class="col-lg-6 mb-4">
+        <div class="vs-section">
+            <div class="text-center mb-4">
+                <h5 class="mb-0 fw-bold">
+                    <i data-feather="zap" class="me-2"></i>
+                    Battle Arena: You vs Bot Jeremy
+                </h5>
+            </div>
+            
+            <div class="row g-3">
+                <div class="col-6">
+                    <div class="competitor-card text-center">
+                        <div class="mb-3">
+                            <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <i data-feather="user" class="text-primary" style="width: 32px; height: 32px;"></i>
+                            </div>
+                        </div>
+                        <h6 class="mb-1">{{ user.username }}</h6>
+                        <h2 class="mb-2">{{ user.points }}</h2>
+                        <div class="badge bg-light text-dark mb-2">{{ user.current_streak }} day streak 🔥</div>
+                        <div class="progress-enhanced">
+                            <div class="progress-bar" style="width: {{ (user.points / (user.points + bot.points) * 100) if (user.points + bot.points) > 0 else 50 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="competitor-card text-center">
+                        <div class="mb-3">
+                            <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <span style="font-size: 32px;">{{ bot.mood_emoji }}</span>
+                            </div>
+                        </div>
+                        <h6 class="mb-1">{{ bot.name }}</h6>
+                        <h2 class="mb-2">{{ bot.points }}</h2>
+                        <div class="badge bg-light text-dark mb-2">{{ bot.current_streak }} day streak 🤖</div>
+                        <div class="progress-enhanced">
+                            <div class="progress-bar" style="width: {{ (bot.points / (user.points + bot.points) * 100) if (user.points + bot.points) > 0 else 50 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 p-3 competitor-card">
+                <div class="d-flex align-items-center mb-2">
+                    <i data-feather="message-circle" class="me-2" style="width: 20px; height: 20px;"></i>
+                    <small class="opacity-75">Bot Jeremy's Challenge:</small>
+                </div>
+                <p class="mb-0 fw-bold">"{{ bot.message }}"</p>
+            </div>
+            
+            <div class="mt-3 text-center">
+                {% if user.points > bot.points %}
+                    <div class="badge bg-success fs-6 px-3 py-2">
+                        🏆 YOU'RE LEADING! Keep dominating!
+                    </div>
+                {% elif user.points < bot.points %}
+                    <div class="badge bg-warning fs-6 px-3 py-2">
+                        ⚡ BOT IS AHEAD! Time for a comeback!
+                    </div>
+                {% else %}
+                    <div class="badge bg-info fs-6 px-3 py-2">
+                        🤝 TIED BATTLE! Who will break ahead?
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="col-lg-6 mb-4">
+        <div class="card border-0 shadow h-100">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i data-feather="activity" class="me-2"></i>
+                    Recent Activity
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if recent_logs %}
+                    <div class="timeline">
+                        {% for log in recent_logs[:5] %}
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="flex-shrink-0">
+                                {% if log.meals_logged and log.workout_logged %}
+                                    <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                        <i data-feather="check" class="text-white" style="width: 16px; height: 16px;"></i>
+                                    </div>
+                                {% elif log.meals_logged or log.workout_logged %}
+                                    <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                        <i data-feather="minus" class="text-white" style="width: 16px; height: 16px;"></i>
+                                    </div>
+                                {% else %}
+                                    <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                        <i data-feather="x" class="text-white" style="width: 16px; height: 16px;"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <div class="fw-bold">{{ log.log_date.strftime('%A, %b %d') }}</div>
+                                <small class="text-muted">
+                                    {% if log.meals_logged and log.workout_logged %}
+                                        Meals ✓ Workout ✓
+                                    {% elif log.meals_logged %}
+                                        Meals ✓ 
+                                    {% elif log.workout_logged %}
+                                        Workout ✓
+                                    {% else %}
+                                        No activity logged
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i data-feather="calendar" class="text-muted mb-2" style="width: 48px; height: 48px;"></i>
+                        <p class="text-muted mb-0">No activity logged yet</p>
+                        <small class="text-muted">Start tracking to see your progress here!</small>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements -->
+    <div class="col-12 mb-4">
+        <div class="card border-0 shadow">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">
+                    <i data-feather="award" class="me-2"></i>
+                    Achievements
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if achievements %}
+                    <div class="row g-3">
+                        {% for achievement in achievements %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card border-warning bg-dark h-100">
+                                <div class="card-body text-center p-3">
+                                    <i data-feather="star" class="text-warning mb-2" style="width: 32px; height: 32px;"></i>
+                                    <h6 class="mb-0">{{ achievement }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i data-feather="star" class="text-muted mb-2" style="width: 48px; height: 48px;"></i>
+                        <p class="text-muted mb-0">No achievements yet</p>
+                        <small class="text-muted">Start logging daily to unlock your first achievement!</small>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="col-12">
+        <div class="card border-0 shadow">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i data-feather="zap" class="me-2"></i>
+                    Quick Actions
+                </h5>
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <a href="{{ url_for('tracker') }}" class="btn btn-success w-100">
+                            <i data-feather="check-circle" class="me-2"></i>
+                            Log Today
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('meal_plan') }}" class="btn btn-info w-100">
+                            <i data-feather="calendar" class="me-2"></i>
+                            View Meal Plan
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <form method="POST" action="{{ url_for('regenerate_meal_plan') }}" class="w-100">
+                            <button type="submit" class="btn btn-warning w-100">
+                                <i data-feather="refresh-cw" class="me-2"></i>
+                                New Meal Plan
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('profile') }}" class="btn btn-secondary w-100">
+                            <i data-feather="user" class="me-2"></i>
+                            Edit Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

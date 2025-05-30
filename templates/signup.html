@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up - The Magic Formula{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5">
+        <div class="card border-0 shadow">
+            <div class="card-header bg-success text-white text-center py-4">
+                <h2 class="mb-0">
+                    <i data-feather="user-plus" class="me-2"></i>
+                    Join Jeremy's Secret Ingredient
+                </h2>
+                <p class="mb-0 mt-2 opacity-75">Start your fitness journey today!</p>
+            </div>
+            
+            <div class="card-body p-4">
+                <form method="POST" id="signupForm">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                        <div class="form-text">Choose a unique username</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                        <div class="form-text">We'll use this to keep your account secure</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required minlength="6">
+                        <div class="form-text">Must be at least 6 characters long</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="confirm_password" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                        <div class="form-text">Re-enter your password</div>
+                    </div>
+                    
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i data-feather="arrow-right" class="me-2"></i>
+                            Create My Account
+                        </button>
+                    </div>
+                    
+                    <div class="text-center">
+                        <p class="mb-0">Already have an account? 
+                            <a href="{{ url_for('login') }}" class="text-success fw-bold">Log in here</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Benefits -->
+        <div class="card border-success bg-dark mt-4">
+            <div class="card-body">
+                <h6 class="card-title text-success">
+                    <i data-feather="star" class="me-2"></i>What you'll get:
+                </h6>
+                <ul class="list-unstyled mb-0 small">
+                    <li class="mb-2">🍽️ Personalized meal plans</li>
+                    <li class="mb-2">📊 Progress tracking & streaks</li>
+                    <li class="mb-2">🏆 Achievement system</li>
+                    <li class="mb-2">🤖 Compete with Bot Jeremy</li>
+                    <li class="mb-0">📱 Access from any device</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('signupForm').addEventListener('submit', function(e) {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm_password').value;
+    
+    if (password !== confirmPassword) {
+        e.preventDefault();
+        alert('Passwords do not match!');
+        return false;
+    }
+    
+    if (password.length < 6) {
+        e.preventDefault();
+        alert('Password must be at least 6 characters long!');
+        return false;
+    }
+});
+</script>
+{% endblock %}
